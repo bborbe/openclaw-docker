@@ -58,6 +58,9 @@ RUN pnpm build
 RUN pnpm ui:install
 RUN pnpm ui:build
 
+# Install Claude Code
+RUN npm install -g @anthropic-ai/claude-code
+
 ENV NODE_ENV=production
 
 # Create openclaw user, pre-create GPG dir

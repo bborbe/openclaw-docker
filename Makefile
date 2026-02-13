@@ -7,6 +7,7 @@ build:
 
 onboard:
 	docker run -it --rm \
+	-p 18901:18789 \
 	-v ~/.openclaw/localclaw:/home/openclaw \
 	openclaw:localclaw \
 	node dist/index.js onboard
@@ -16,20 +17,20 @@ start:
 		--rm \
 		-d \
 		--name localclaw \
-		--user $(id -u):$(id -g) \
+		--user $$(id -u):$$(id -g) \
 		-p 18901:18789 \
 		-v ~/.openclaw/localclaw:/home/openclaw \
 		openclaw:localclaw \
 		node dist/index.js gateway --bind=lan
 
 stop:
-	docker kill openclaw
+	docker kill localclaw
 
 run:
 	docker run \
 		--rm \
 		--name localclaw \
-		--user $(id -u):$(id -g) \
+		--user $$(id -u):$$(id -g) \
 		-p 18901:18789 \
 		-v ~/.openclaw/localclaw:/home/openclaw \
 		openclaw:localclaw \
