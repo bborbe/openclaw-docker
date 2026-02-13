@@ -1,0 +1,11 @@
+/.claude/mcp-*.json
+/.claude/mcp.json
+/.claude/settings.local.json
+/.idea
+/.mcp-*
+/.mcp.json
+/.obsidian
+/.semantic-search
+/.serena
+/.tmp
+/.playwright-mcp/
