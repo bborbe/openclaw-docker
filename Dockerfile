@@ -17,7 +17,9 @@ RUN --mount=type=cache,target=/var/cache/apt \
     gnupg \
     wget \
     apt-transport-https \
-    lsb-release
+    lsb-release \
+    telnet \
+    iputils-ping
 
 # Install Trivy
 RUN --mount=type=cache,target=/var/cache/apt \
