@@ -27,8 +27,11 @@ Access: http://localhost:18901
 ## Available Commands
 
 ```bash
-# Build image
+# Build image (local arch)
 make build
+
+# Build multi-arch (amd64 + arm64) and push
+make build-multiarch
 
 # Run (foreground)
 make run
@@ -61,6 +64,7 @@ To update, edit `VERSION` in Makefile and rebuild.
 ## Architecture
 
 - Base: `node:22-slim` (required by OpenClaw >=22.12.0)
+- Platforms: `linux/amd64`, `linux/arm64` (multi-arch)
 - User: `openclaw` (non-root)
 - Port: 18789 (exposed as 18901)
 - State: `/home/openclaw/.openclaw`

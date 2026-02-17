@@ -2,6 +2,7 @@
 FROM node:22-slim
 
 ARG VERSION
+ARG TARGETARCH
 
 USER root
 
@@ -29,11 +30,11 @@ RUN --mount=type=cache,target=/var/cache/apt \
     apt-get install -y --no-install-recommends trivy
 
 # Install Helm
-RUN curl -fsSL https://get.helm.sh/helm-v3.20.0-linux-arm64.tar.gz \
-    | tar xz -C /usr/local/bin --strip-components=1 linux-arm64/helm
+RUN curl -fsSL https://get.helm.sh/helm-v3.20.0-linux-${TARGETARCH}.tar.gz \
+    | tar xz -C /usr/local/bin --strip-components=1 linux-${TARGETARCH}/helm
 
 # Install Golang
-RUN curl -fsSL https://go.dev/dl/go1.26.0.linux-arm64.tar.gz -o /tmp/go.tar.gz \
+RUN curl -fsSL https://go.dev/dl/go1.26.0.linux-${TARGETARCH}.tar.gz -o /tmp/go.tar.gz \
     && tar -C /opt -xzf /tmp/go.tar.gz \
     && rm /tmp/go.tar.gz
 ENV PATH="/opt/go/bin:${PATH}"
