@@ -19,7 +19,9 @@ RUN --mount=type=cache,target=/var/cache/apt \
     apt-transport-https \
     lsb-release \
     telnet \
-    iputils-ping
+    iputils-ping \
+    openssh-client \
+    make
 
 # Install Trivy
 RUN --mount=type=cache,target=/var/cache/apt \
@@ -37,7 +39,12 @@ RUN curl -fsSL https://get.helm.sh/helm-v3.20.0-linux-${TARGETARCH}.tar.gz \
 RUN curl -fsSL https://go.dev/dl/go1.26.0.linux-${TARGETARCH}.tar.gz -o /tmp/go.tar.gz \
     && tar -C /opt -xzf /tmp/go.tar.gz \
     && rm /tmp/go.tar.gz
-ENV PATH="/opt/go/bin:${PATH}"
+ENV PATH="/opt/go/bin:/home/openclaw/go/bin:${PATH}"
+
+# Install Go security tools
+RUN GOBIN=/usr/local/bin go install golang.org/x/vuln/cmd/govulncheck@latest && \
+    GOBIN=/usr/local/bin go install github.com/securego/gosec/v2/cmd/gosec@latest && \
+    GOBIN=/usr/local/bin go install github.com/google/osv-scanner/cmd/osv-scanner@latest
 
 # Install OpenClaw & Claude Code from npm (no build needed!)
 RUN npm install -g openclaw@${VERSION} @anthropic-ai/claude-code
