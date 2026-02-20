@@ -54,7 +54,7 @@ RUN GOBIN=/usr/local/bin go install golang.org/x/vuln/cmd/govulncheck@latest && 
     GOBIN=/usr/local/bin go install github.com/google/osv-scanner/cmd/osv-scanner@latest
 
 # Install OpenClaw & Claude Code from npm (no build needed!)
-RUN npm install -g openclaw@${VERSION} @anthropic-ai/claude-code
+RUN npm install -g openclaw@${VERSION} @anthropic-ai/claude-code @openai/codex
 
 # Matrix support (bot SDK + E2EE crypto)
 RUN npm install -g @vector-im/matrix-bot-sdk @matrix-org/matrix-sdk-crypto-nodejs
