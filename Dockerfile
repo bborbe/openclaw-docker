@@ -21,7 +21,14 @@ RUN --mount=type=cache,target=/var/cache/apt \
     telnet \
     iputils-ping \
     openssh-client \
-    make
+    make \
+    bat \
+    fd-find \
+    fzf \
+    trash-cli \
+    ripgrep \
+    jq \
+    ffmpeg
 
 # Install Trivy
 RUN --mount=type=cache,target=/var/cache/apt \
