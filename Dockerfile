@@ -40,7 +40,7 @@ RUN curl -fsSL https://go.dev/dl/go1.26.0.linux-${TARGETARCH}.tar.gz -o /tmp/go.
 ENV PATH="/opt/go/bin:${PATH}"
 
 # Install OpenClaw & Claude Code from npm (no build needed!)
-RUN npm install -g openclaw@${VERSION} @anthropic-ai/claude-code
+RUN npm install -g openclaw@${VERSION} @anthropic-ai/claude-code @openai/codex
 
 # Matrix support (bot SDK + E2EE crypto)
 RUN npm install -g @vector-im/matrix-bot-sdk @matrix-org/matrix-sdk-crypto-nodejs
