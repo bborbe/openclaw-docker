@@ -69,6 +69,15 @@ To update, edit `VERSION` in Makefile and rebuild.
 - Port: 18789 (exposed as 18901)
 - State: `/home/openclaw/.openclaw`
 
+
+## Setup Codex
+
+```bash
+openclaw onboard --auth-choice openai-codex
+openclaw models set openai-codex/gpt-5.3-codex
+openclaw models status --plain
+```
+
 ## License
 
 MIT
