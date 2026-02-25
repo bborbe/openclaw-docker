@@ -1,6 +1,6 @@
 REGISTRY ?= docker.io
 IMAGE ?= bborbe/openclaw
-VERSION ?= 2026.2.15
+VERSION ?= 2026.2.24
 
 default: build
 
