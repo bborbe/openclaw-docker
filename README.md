@@ -80,4 +80,4 @@ openclaw models status --plain
 
 ## License
 
-MIT
+BSD-2-Clause
