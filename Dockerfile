@@ -3,6 +3,7 @@ FROM node:22-slim
 
 ARG VERSION
 ARG TARGETARCH
+ARG KUBECTL_CHANNEL=v1.35
 
 USER root
 
@@ -38,6 +39,17 @@ RUN --mount=type=cache,target=/var/cache/apt \
     echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" > /etc/apt/sources.list.d/google-cloud-sdk.list && \
     apt-get update && \
     apt-get install -y --no-install-recommends google-cloud-cli
+
+# Install kubectl
+RUN --mount=type=cache,target=/var/cache/apt \
+    --mount=type=cache,target=/var/lib/apt/lists \
+    mkdir -p /etc/apt/keyrings && \
+    curl -fsSL https://pkgs.k8s.io/core:/stable:/${KUBECTL_CHANNEL}/deb/Release.key \
+    | gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg && \
+    chmod 644 /etc/apt/keyrings/kubernetes-apt-keyring.gpg && \
+    echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/${KUBECTL_CHANNEL}/deb/ /" > /etc/apt/sources.list.d/kubernetes.list && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends kubectl
 
 # Install Trivy
 RUN --mount=type=cache,target=/var/cache/apt \
