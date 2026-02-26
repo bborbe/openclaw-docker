@@ -9,6 +9,7 @@ Docker image for [OpenClaw](https://openclaw.ai) with additional tools.
 - **Matrix** bot SDK + E2EE crypto
 - **GitHub CLI** (gh)
 - **Helm** v3.20.0
+- **kubectl** (Kubernetes CLI)
 - **Go** 1.26.0
 - **Trivy** security scanner
 - **Networking tools** (telnet, ping)
