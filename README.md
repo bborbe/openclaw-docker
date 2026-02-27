@@ -5,14 +5,14 @@ Docker image and compose runtime for [OpenClaw](https://openclaw.ai).
 ## TL;DR
 
 ```bash
-# 1) build image
-make build
+# 1) run in foreground (build + start via compose)
+make run
 
-# 2) start service (docker compose, auto-restart)
+# 2) stop when done (or Ctrl+C then stop)
+make stop
+
+# 3) for background mode instead
 make start
-
-# 3) follow logs
-make logs
 ```
 
 OpenClaw UI: http://localhost:18789
@@ -21,7 +21,8 @@ OpenClaw UI: http://localhost:18789
 
 ## Why docker compose
 
-`make start` uses `docker compose up -d` with `restart: unless-stopped`.
+`make run` uses `docker compose up --build` (foreground).
+`make start` uses `docker compose up -d --build` (background) with `restart: unless-stopped`.
 
 So LocalClaw comes back automatically after:
 - process crashes
@@ -39,7 +40,7 @@ make build
 # Build multi-arch (amd64 + arm64) and push
 make build-multiarch
 
-# Start background service via compose
+# Start background service via compose (build + start)
 make start
 
 # Restart service
@@ -57,7 +58,7 @@ make exec
 # Run onboarding (interactive, one-shot)
 make onboard
 
-# Run container in foreground (no compose)
+# Run service in foreground via compose (build + start)
 make run
 
 # Push image to registry
