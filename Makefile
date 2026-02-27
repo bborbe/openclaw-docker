@@ -40,7 +40,7 @@ clean:
 .PHONY: onboard
 onboard:
 	docker run -it --rm \
-		-p 18901:18789 \
+		-p 18789:18789 \
 		-v ~/.openclaw/localclaw:/home/openclaw \
 		openclaw:localclaw \
 		openclaw onboard
@@ -61,7 +61,7 @@ run:
 	docker run \
 		--rm \
 		--name $(CONTAINER_NAME) \
-		-p 18901:18789 \
+		-p 18789:18789 \
 		-v ~/.openclaw/localclaw:/home/openclaw \
 		openclaw:localclaw
 

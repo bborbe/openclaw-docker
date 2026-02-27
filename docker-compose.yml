@@ -4,6 +4,6 @@ services:
     container_name: localclaw
     restart: unless-stopped
     ports:
-      - "18901:18789"
+      - "18789:18789"
     volumes:
       - ${HOME}/.openclaw/localclaw:/home/openclaw
