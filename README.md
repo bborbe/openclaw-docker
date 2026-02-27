@@ -17,10 +17,11 @@ Docker image for [OpenClaw](https://openclaw.ai) with additional tools.
 ## Quick Start
 
 ```bash
-docker run -it --rm \
-  -p 18901:18789 \
-  -v ~/.openclaw:/home/openclaw \
-  docker.io/bborbe/openclaw:2026.2.15
+# Build local image
+make build
+
+# Start via docker compose (includes restart: unless-stopped)
+make start
 ```
 
 Access: http://localhost:18901
@@ -37,10 +38,13 @@ make build-multiarch
 # Run (foreground)
 make run
 
-# Start (background)
+# Start (background, auto-restart on crash/reboot)
 make start
 
-# Stop background container
+# Restart service
+make restart
+
+# Stop background service
 make stop
 
 # View logs
@@ -58,7 +62,7 @@ make clean
 
 ## Version
 
-Current OpenClaw version: **2026.2.15**
+Current OpenClaw version: **2026.2.24**
 
 To update, edit `VERSION` in Makefile and rebuild.
 
@@ -82,3 +86,9 @@ openclaw models status --plain
 ## License
 
 BSD-2-Clause
+
+
+## Runtime
+
+`make start` now uses `docker compose up -d` with `restart: unless-stopped` in `docker-compose.yml`.
+That means the container is automatically restarted after crashes and Docker daemon restarts.
