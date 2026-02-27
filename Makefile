@@ -47,7 +47,7 @@ onboard:
 
 .PHONY: start
 start:
-	$(COMPOSE) up -d
+	$(COMPOSE) up -d --build
 
 .PHONY: stop
 stop:
@@ -58,12 +58,7 @@ restart: stop start
 
 .PHONY: run
 run:
-	docker run \
-		--rm \
-		--name $(CONTAINER_NAME) \
-		-p 18789:18789 \
-		-v ~/.openclaw/localclaw:/home/openclaw \
-		openclaw:localclaw
+	$(COMPOSE) up --build
 
 .PHONY: logs
 logs:
