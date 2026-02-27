@@ -2,6 +2,10 @@ REGISTRY ?= docker.io
 IMAGE ?= bborbe/openclaw
 VERSION ?= 2026.2.24
 
+COMPOSE ?= docker compose
+SERVICE ?= localclaw
+CONTAINER_NAME ?= localclaw
+
 default: build
 
 .PHONY: build
@@ -36,36 +40,39 @@ clean:
 .PHONY: onboard
 onboard:
 	docker run -it --rm \
-	-p 18901:18789 \
-	-v ~/.openclaw/localclaw:/home/openclaw \
-	openclaw:localclaw \
-	openclaw onboard
-
-start:
-	docker run \
-		--rm \
-		-d \
-		--name localclaw \
-		-p 18901:18789 \
+		-p 18789:18789 \
 		-v ~/.openclaw/localclaw:/home/openclaw \
-		openclaw:localclaw
+		openclaw:localclaw \
+		openclaw onboard
 
+.PHONY: start
+start:
+	$(COMPOSE) up -d
+
+.PHONY: stop
 stop:
-	docker kill localclaw
+	$(COMPOSE) down
 
+.PHONY: restart
+restart: stop start
+
+.PHONY: run
 run:
 	docker run \
 		--rm \
-		--name localclaw \
-		-p 18901:18789 \
+		--name $(CONTAINER_NAME) \
+		-p 18789:18789 \
 		-v ~/.openclaw/localclaw:/home/openclaw \
 		openclaw:localclaw
 
+.PHONY: logs
 logs:
-	docker logs localclaw -f
+	$(COMPOSE) logs -f $(SERVICE)
 
+.PHONY: exec
 exec:
-	docker exec -ti localclaw bash
+	$(COMPOSE) exec $(SERVICE) bash
 
+.PHONY: open
 open:
-	open http://localhost:18901
+	open http://localhost:18789
