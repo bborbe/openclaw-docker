@@ -1,0 +1,9 @@
+services:
+  localclaw:
+    image: openclaw:localclaw
+    container_name: localclaw
+    restart: unless-stopped
+    ports:
+      - "18789:18789"
+    volumes:
+      - ${HOME}/.openclaw/localclaw:/home/openclaw

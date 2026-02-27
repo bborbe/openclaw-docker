@@ -1,31 +1,37 @@
 # OpenClaw Docker
 
-Docker image for [OpenClaw](https://openclaw.ai) with additional tools.
+Docker image and compose runtime for [OpenClaw](https://openclaw.ai).
 
-## Features
-
-- **OpenClaw** (from npm, version-pinned)
-- **Claude Code** CLI
-- **Matrix** bot SDK + E2EE crypto
-- **GitHub CLI** (gh)
-- **Helm** v3.20.0
-- **kubectl** (Kubernetes CLI)
-- **Go** 1.26.0
-- **Trivy** security scanner
-- **Networking tools** (telnet, ping)
-
-## Quick Start
+## TL;DR
 
 ```bash
-docker run -it --rm \
-  -p 18901:18789 \
-  -v ~/.openclaw:/home/openclaw \
-  docker.io/bborbe/openclaw:2026.2.15
+# 1) run in foreground (build + start via compose)
+make run
+
+# 2) stop when done (or Ctrl+C then stop)
+make stop
+
+# 3) for background mode instead
+make start
 ```
 
-Access: http://localhost:18901
+OpenClaw UI: http://localhost:18789
 
-## Available Commands
+---
+
+## Why docker compose
+
+`make run` uses `docker compose up --build` (foreground).
+`make start` uses `docker compose up -d --build` (background) with `restart: unless-stopped`.
+
+So LocalClaw comes back automatically after:
+- process crashes
+- Docker daemon restart
+- host reboot
+
+---
+
+## Commands
 
 ```bash
 # Build image (local arch)
@@ -34,42 +40,56 @@ make build
 # Build multi-arch (amd64 + arm64) and push
 make build-multiarch
 
-# Run (foreground)
-make run
-
-# Start (background)
+# Start background service via compose (build + start)
 make start
 
-# Stop background container
+# Restart service
+make restart
+
+# Stop service
 make stop
 
 # View logs
 make logs
 
-# Run onboarding
+# Open shell in running container
+make exec
+
+# Run onboarding (interactive, one-shot)
 make onboard
 
-# Push to DockerHub
+# Run service in foreground via compose (build + start)
+make run
+
+# Push image to registry
 make upload
 
-# Clean local images
+# Remove local images
 make clean
 ```
 
-## Version
+---
 
-Current OpenClaw version: **2026.2.15**
+## Runtime details
 
-To update, edit `VERSION` in Makefile and rebuild.
+- Container name: `localclaw`
+- Port mapping: `18789:18789`
+- State mount: `~/.openclaw/localclaw:/home/openclaw`
+- Compose file: `docker-compose.yml`
+- Restart policy: `unless-stopped`
 
-## Architecture
+---
 
-- Base: `node:22-slim` (required by OpenClaw >=22.12.0)
-- Platforms: `linux/amd64`, `linux/arm64` (multi-arch)
-- User: `openclaw` (non-root)
-- Port: 18789 (exposed as 18901)
-- State: `/home/openclaw/.openclaw`
+## What's in the image
 
+- OpenClaw (npm, version-pinned)
+- Claude Code CLI
+- Matrix bot SDK + E2EE crypto libs
+- GitHub CLI (`gh`)
+- Helm, kubectl, Go, Trivy
+- network/debug tools
+
+---
 
 ## Setup Codex
 
@@ -78,7 +98,3 @@ openclaw onboard --auth-choice openai-codex
 openclaw models set openai-codex/gpt-5.3-codex
 openclaw models status --plain
 ```
-
-## License
-
-BSD-2-Clause
