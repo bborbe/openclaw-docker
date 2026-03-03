@@ -1,6 +1,6 @@
 REGISTRY ?= docker.io
 IMAGE ?= bborbe/openclaw
-VERSION ?= 2026.2.26
+VERSION ?= 2026.3.1
 
 COMPOSE ?= docker compose
 SERVICE ?= localclaw
