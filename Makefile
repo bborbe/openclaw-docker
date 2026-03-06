@@ -8,6 +8,17 @@ CONTAINER_NAME ?= localclaw
 
 default: build
 
+.PHONY: precommit
+precommit: check
+
+.PHONY: test
+test: check
+
+.PHONY: check
+check:
+	shellcheck entrypoint.sh
+	docker compose config -q
+
 .PHONY: build
 build:
 	DOCKER_BUILDKIT=1 docker build \
