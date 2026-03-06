@@ -1,6 +1,6 @@
 services:
   localclaw:
-    image: openclaw:localclaw
+    image: ${REGISTRY}/${IMAGE}:${VERSION}
     container_name: localclaw
     restart: unless-stopped
     ports:
