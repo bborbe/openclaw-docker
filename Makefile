@@ -2,6 +2,8 @@ REGISTRY ?= docker.io
 IMAGE ?= bborbe/openclaw
 VERSION ?= 2026.3.1
 
+export REGISTRY IMAGE VERSION
+
 COMPOSE ?= docker compose
 SERVICE ?= localclaw
 CONTAINER_NAME ?= localclaw
@@ -14,7 +16,7 @@ build:
 		--build-arg VERSION=$(VERSION) \
 		--build-arg BUILDKIT_INLINE_CACHE=1 \
 		-t $(REGISTRY)/$(IMAGE):$(VERSION) \
-		-t openclaw:localclaw \
+		-t $(REGISTRY)/$(IMAGE):latest \
 		-f Dockerfile \
 		.
 
@@ -24,6 +26,7 @@ build-multiarch:
 		--platform linux/amd64,linux/arm64 \
 		--build-arg VERSION=$(VERSION) \
 		-t $(REGISTRY)/$(IMAGE):$(VERSION) \
+		-t $(REGISTRY)/$(IMAGE):latest \
 		--push \
 		-f Dockerfile \
 		.
@@ -31,18 +34,19 @@ build-multiarch:
 .PHONY: upload
 upload:
 	docker push $(REGISTRY)/$(IMAGE):$(VERSION)
+	docker push $(REGISTRY)/$(IMAGE):latest
 
 .PHONY: clean
 clean:
 	docker rmi $(REGISTRY)/$(IMAGE):$(VERSION) || true
-	docker rmi openclaw:localclaw || true
+	docker rmi $(REGISTRY)/$(IMAGE):latest || true
 
 .PHONY: onboard
 onboard:
 	docker run -it --rm \
 		-p 18789:18789 \
 		-v ~/.openclaw/localclaw:/home/openclaw \
-		openclaw:localclaw \
+		$(REGISTRY)/$(IMAGE):latest \
 		openclaw onboard
 
 .PHONY: start
@@ -87,5 +91,5 @@ pair-telegram:
 	@test -n "$(TOKEN)" || { echo "Usage: make pair-telegram TOKEN=your_bot_token"; exit 1; }
 	docker run -it --rm \
 		-v $(STATE_DIR):/home/openclaw \
-		openclaw:localclaw \
+		$(REGISTRY)/$(IMAGE):latest \
 		openclaw pairing approve telegram $(TOKEN)
