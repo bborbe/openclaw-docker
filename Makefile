@@ -71,3 +71,21 @@ exec:
 .PHONY: open
 open:
 	open http://localhost:18789
+
+STATE_DIR ?= $(HOME)/.openclaw/localclaw
+CONFIG ?= $(STATE_DIR)/.openclaw/openclaw.json
+
+.PHONY: fix-config
+fix-config:
+	@command -v jq >/dev/null || { echo "Error: jq is required. Install with: brew install jq (macOS) or apt install jq (Linux)"; exit 1; }
+	@test -f $(CONFIG) || { echo "Error: $(CONFIG) not found. Run 'make onboard' first."; exit 1; }
+	jq '.gateway.controlUi = {"allowedOrigins": ["http://localhost:18789","http://127.0.0.1:18789"], "enabled": false}' $(CONFIG) > $(CONFIG).tmp && mv $(CONFIG).tmp $(CONFIG)
+	@echo "Done: controlUi disabled in $(CONFIG)"
+
+.PHONY: pair-telegram
+pair-telegram:
+	@test -n "$(TOKEN)" || { echo "Usage: make pair-telegram TOKEN=your_bot_token"; exit 1; }
+	docker run -it --rm \
+		-v $(STATE_DIR):/home/openclaw \
+		openclaw:localclaw \
+		openclaw pairing approve telegram $(TOKEN)
