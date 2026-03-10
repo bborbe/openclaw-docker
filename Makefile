@@ -1,6 +1,6 @@
 REGISTRY ?= docker.io
 IMAGE ?= bborbe/openclaw
-VERSION ?= 2026.3.1
+VERSION ?= 2026.3.8
 
 export REGISTRY IMAGE VERSION
 
