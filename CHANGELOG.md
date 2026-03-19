@@ -8,6 +8,9 @@ Please choose versions by [Semantic Versioning](http://semver.org/).
 * MINOR version when you add functionality in a backwards-compatible manner, and
 * PATCH version when you make backwards-compatible bug fixes.
 
+## v0.1.1
+- Separate OPENCLAW_VERSION from VERSION to fix Docker build with git tags
+
 ## v0.1.0
 - Add OpenClaw Docker image with Node.js, Claude Code, Codex CLI, and Gemini CLI
 - Add Go 1.26.1 toolchain and security tools (govulncheck, gosec, osv-scanner)

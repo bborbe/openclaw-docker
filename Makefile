@@ -1,8 +1,9 @@
 REGISTRY ?= docker.io
 IMAGE ?= bborbe/openclaw
 VERSION ?= $(shell git describe --tags --always --dirty 2>/dev/null || echo latest)
+OPENCLAW_VERSION ?= 2026.3.8
 
-export REGISTRY IMAGE VERSION
+export REGISTRY IMAGE VERSION OPENCLAW_VERSION
 
 COMPOSE ?= docker compose
 SERVICE ?= localclaw
@@ -24,7 +25,7 @@ check:
 .PHONY: build
 build:
 	DOCKER_BUILDKIT=1 docker build \
-		--build-arg VERSION=$(VERSION) \
+		--build-arg OPENCLAW_VERSION=$(OPENCLAW_VERSION) \
 		--build-arg BUILDKIT_INLINE_CACHE=1 \
 		-t $(REGISTRY)/$(IMAGE):$(VERSION) \
 		-t $(REGISTRY)/$(IMAGE):latest \
@@ -35,7 +36,7 @@ build:
 build-multiarch:
 	docker buildx build \
 		--platform linux/amd64,linux/arm64 \
-		--build-arg VERSION=$(VERSION) \
+		--build-arg OPENCLAW_VERSION=$(OPENCLAW_VERSION) \
 		-t $(REGISTRY)/$(IMAGE):$(VERSION) \
 		-t $(REGISTRY)/$(IMAGE):latest \
 		--push \

@@ -1,7 +1,7 @@
 # OpenClaw from npm (no base image needed)
 FROM node:22-slim
 
-ARG VERSION
+ARG OPENCLAW_VERSION
 ARG TARGETARCH
 ARG KUBECTL_CHANNEL=v1.35
 
@@ -75,7 +75,7 @@ RUN GOBIN=/usr/local/bin go install golang.org/x/vuln/cmd/govulncheck@latest && 
     GOBIN=/usr/local/bin go install github.com/google/osv-scanner/cmd/osv-scanner@latest
 
 # Install OpenClaw & Claude Code from npm (no build needed!)
-RUN npm install -g openclaw@${VERSION} @anthropic-ai/claude-code @openai/codex @google/gemini-cli
+RUN npm install -g openclaw@${OPENCLAW_VERSION} @anthropic-ai/claude-code @openai/codex @google/gemini-cli
 
 # Matrix support (bot SDK + E2EE crypto)
 RUN npm install -g @vector-im/matrix-bot-sdk @matrix-org/matrix-sdk-crypto-nodejs
