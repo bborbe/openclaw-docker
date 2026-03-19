@@ -1,6 +1,6 @@
 REGISTRY ?= docker.io
 IMAGE ?= bborbe/openclaw
-VERSION ?= 2026.3.8
+VERSION ?= $(shell git describe --tags --always --dirty 2>/dev/null || echo latest)
 
 export REGISTRY IMAGE VERSION
 
