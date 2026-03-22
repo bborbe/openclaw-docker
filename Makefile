@@ -19,7 +19,7 @@ test: check
 
 .PHONY: check
 check:
-	shellcheck entrypoint.sh
+	shellcheck files/entrypoint.sh
 	docker compose config -q
 
 .PHONY: build

@@ -8,6 +8,13 @@ Please choose versions by [Semantic Versioning](http://semver.org/).
 * MINOR version when you add functionality in a backwards-compatible manner, and
 * PATCH version when you make backwards-compatible bug fixes.
 
+## v0.3.0
+- Separate entrypoint (prepare) from CMD (supervisord start)
+- Move entrypoint.sh and supervisord.conf to files/ directory
+- Make openclaw gateway args configurable via OPENCLAW_ARGS env var
+- Add docker-compose profiles: secure (default) and lan (--allow-unconfigured --bind lan)
+- Fix shellcheck path in Makefile after files/ move
+
 ## v0.2.0
 - Add optional supervisord drop-in helper config pattern for sidecar processes
 - Add procps package for ps and pgrep utilities

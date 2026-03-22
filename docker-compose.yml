@@ -1,9 +1,24 @@
 services:
-  localclaw:
+  localclaw-secure:
     image: ${REGISTRY}/${IMAGE}:${VERSION}
-    container_name: localclaw
+    container_name: localclaw-secure
     restart: unless-stopped
     ports:
       - "18789:18789"
+    environment:
+      - OPENCLAW_ARGS=
+    volumes:
+      - ${HOME}/.openclaw/localclaw:/home/openclaw
+
+  localclaw-lan:
+    image: ${REGISTRY}/${IMAGE}:${VERSION}
+    container_name: localclaw
+    restart: unless-stopped
+    profiles:
+      - lan
+    ports:
+      - "18789:18789"
+    environment:
+      - OPENCLAW_ARGS=--allow-unconfigured --bind lan
     volumes:
       - ${HOME}/.openclaw/localclaw:/home/openclaw

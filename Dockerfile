@@ -89,12 +89,13 @@ RUN useradd --create-home --shell /bin/bash openclaw && \
     mkdir -p /opt/gnupg && chown openclaw:openclaw /opt/gnupg && chmod 700 /opt/gnupg
 
 ENV GNUPGHOME=/opt/gnupg
-COPY --chmod=755 entrypoint.sh /entrypoint.sh
-COPY supervisord.conf /etc/supervisor/supervisord.conf
+COPY --chmod=755 files/entrypoint.sh /entrypoint.sh
+COPY files/supervisord.conf /etc/supervisor/supervisord.conf
 
+ENV OPENCLAW_ARGS=""
 ENV OPENCLAW_STATE_DIR=/home/openclaw/.openclaw
 ENV HOME=/home/openclaw
 
 USER openclaw
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["openclaw", "gateway", "--allow-unconfigured", "--bind", "lan"]
+CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
