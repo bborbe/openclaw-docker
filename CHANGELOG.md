@@ -8,6 +8,9 @@ Please choose versions by [Semantic Versioning](http://semver.org/).
 * MINOR version when you add functionality in a backwards-compatible manner, and
 * PATCH version when you make backwards-compatible bug fixes.
 
+## v0.3.2
+- Add vim to system tools
+
 ## v0.3.1
 - Simplify localclaw compose service naming and remove port mapping
 

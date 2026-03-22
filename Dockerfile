@@ -31,7 +31,8 @@ RUN --mount=type=cache,target=/var/cache/apt \
     jq \
     ffmpeg \
     procps \
-    supervisor
+    supervisor \
+    vim
 
 # Install gcloud CLI
 RUN --mount=type=cache,target=/var/cache/apt \
