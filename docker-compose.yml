@@ -1,10 +1,8 @@
 services:
-  localclaw-secure:
+  localclaw:
     image: ${REGISTRY}/${IMAGE}:${VERSION}
-    container_name: localclaw-secure
+    container_name: localclaw
     restart: unless-stopped
-    ports:
-      - "18789:18789"
     environment:
       - OPENCLAW_ARGS=
     volumes:
