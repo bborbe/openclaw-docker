@@ -29,7 +29,9 @@ RUN --mount=type=cache,target=/var/cache/apt \
     trash-cli \
     ripgrep \
     jq \
-    ffmpeg
+    ffmpeg \
+    procps \
+    supervisor
 
 # Install gcloud CLI
 RUN --mount=type=cache,target=/var/cache/apt \
@@ -88,6 +90,7 @@ RUN useradd --create-home --shell /bin/bash openclaw && \
 
 ENV GNUPGHOME=/opt/gnupg
 COPY --chmod=755 entrypoint.sh /entrypoint.sh
+COPY supervisord.conf /etc/supervisor/supervisord.conf
 
 ENV OPENCLAW_STATE_DIR=/home/openclaw/.openclaw
 ENV HOME=/home/openclaw

@@ -1,0 +1,13 @@
+; Copy this file into ~/.openclaw/localclaw/.config/supervisor/conf.d/
+; and adjust the command for your setup.
+
+[program:task-watcher]
+command=/home/openclaw/bin/task-watcher
+directory=/home/openclaw
+autostart=true
+autorestart=true
+priority=20
+stdout_logfile=/dev/fd/1
+stdout_logfile_maxbytes=0
+stderr_logfile=/dev/fd/2
+stderr_logfile_maxbytes=0

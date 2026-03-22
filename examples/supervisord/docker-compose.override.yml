@@ -1,0 +1,5 @@
+services:
+  localclaw:
+    volumes:
+      - ./examples/supervisord/task-watcher.conf.example:/home/openclaw/.config/supervisor/conf.d/task-watcher.conf:ro
+      - ./examples/supervisord/git-ai-sync.conf.example:/home/openclaw/.config/supervisor/conf.d/git-ai-sync.conf:ro

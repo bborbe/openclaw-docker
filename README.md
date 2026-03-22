@@ -88,6 +88,58 @@ OpenClaw UI: http://localhost:18789
 
 ---
 
+## Optional helper processes with supervisord
+
+The container now starts `supervisord` for the normal `make run` / `make start` path.
+OpenClaw remains the default managed program, and you can add extra long-running helpers in your **personal deployment layer** via drop-in config files.
+
+This keeps the base image generic:
+- OpenClaw still starts by default with no extra personal services enabled
+- helper processes are opt-in via mounted config snippets
+- upstream `docker-compose.yml` stays clean while personal deployments remain flexible
+
+### How it works
+
+- `entrypoint.sh` starts `supervisord` for the default container command
+- the image ships with `/etc/supervisor/supervisord.conf`
+- that base config always runs the OpenClaw gateway
+- optional helper programs are loaded from:
+  - `/home/openclaw/.config/supervisor/conf.d/*.conf`
+
+This means you can keep your own `task-watcher`, `git-ai-sync`, or similar long-running helpers outside the repo and just mount them into the include directory.
+
+### Example files
+
+- `examples/supervisord/supervisord.conf`
+- `examples/supervisord/docker-compose.override.yml`
+- `examples/supervisord/task-watcher.conf.example`
+- `examples/supervisord/git-ai-sync.conf.example`
+
+Example usage:
+
+```bash
+mkdir -p ~/.openclaw/localclaw/.config/supervisor/conf.d
+cp examples/supervisord/task-watcher.conf.example ~/.openclaw/localclaw/.config/supervisor/conf.d/task-watcher.conf
+cp examples/supervisord/git-ai-sync.conf.example ~/.openclaw/localclaw/.config/supervisor/conf.d/git-ai-sync.conf
+
+# edit the copied files for your environment, then run
+make run
+```
+
+Or mount example files directly with the sample override:
+
+```bash
+cp examples/supervisord/docker-compose.override.yml docker-compose.override.yml
+make run
+```
+
+### Personalizing safely
+
+Keep custom helper definitions in `~/.openclaw/localclaw/.config/supervisor/conf.d/`, not in this repo's main `docker-compose.yml`.
+That way upstream stays clean while personal deployments can still run additional managed processes.
+
+---
+
 ## Why docker compose
 
 `make run` uses `docker compose up --build` (foreground).
@@ -117,7 +169,7 @@ So LocalClaw comes back automatically after:
 - Matrix bot SDK + E2EE crypto libs
 - GitHub CLI (`gh`), gcloud CLI
 - Helm, kubectl, Go, Trivy, govulncheck, gosec, osv-scanner
-- ripgrep, bat, fd, fzf, jq, ffmpeg
+- ripgrep, bat, fd, fzf, jq, ffmpeg, supervisord
 - network/debug tools (telnet, ping, ssh)
 
 ---
