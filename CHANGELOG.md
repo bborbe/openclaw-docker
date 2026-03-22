@@ -8,6 +8,11 @@ Please choose versions by [Semantic Versioning](http://semver.org/).
 * MINOR version when you add functionality in a backwards-compatible manner, and
 * PATCH version when you make backwards-compatible bug fixes.
 
+## v0.2.0
+- Add optional supervisord drop-in helper config pattern for sidecar processes
+- Add procps package for ps and pgrep utilities
+- Add supervisord examples (git-ai-sync, task-watcher)
+
 ## v0.1.1
 - Separate OPENCLAW_VERSION from VERSION to fix Docker build with git tags
 
