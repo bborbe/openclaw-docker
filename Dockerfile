@@ -29,7 +29,8 @@ RUN --mount=type=cache,target=/var/cache/apt \
     trash-cli \
     ripgrep \
     jq \
-    ffmpeg
+    ffmpeg \
+    supervisor
 
 # Install gcloud CLI
 RUN --mount=type=cache,target=/var/cache/apt \

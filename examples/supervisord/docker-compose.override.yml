@@ -1,0 +1,6 @@
+services:
+  localclaw:
+    environment:
+      OPENCLAW_SUPERVISORD_CONFIG: /home/openclaw/.config/supervisor/supervisord.conf
+    volumes:
+      - ./examples/supervisord/supervisord.conf:/home/openclaw/.config/supervisor/supervisord.conf:ro

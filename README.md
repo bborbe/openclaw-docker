@@ -88,6 +88,50 @@ OpenClaw UI: http://localhost:18789
 
 ---
 
+## Optional helper processes with supervisord
+
+By default the container runs only OpenClaw.
+
+If you want extra long-running helper processes in your **personal deployment layer** (for example a `task-watcher`, `git-ai-sync`, or another sidecar-like loop that should live in the same container), the image now supports an **optional** `supervisord` mode.
+
+This keeps the base image generic:
+- no Ben-specific services are enabled by default
+- existing `make run` / `make start` behavior stays unchanged
+- helper processes are defined only by a mounted config in your own deployment
+
+### How it works
+
+- Default behavior: `entrypoint.sh` runs `openclaw gateway --allow-unconfigured --bind lan`
+- Optional behavior: if `OPENCLAW_SUPERVISORD_CONFIG` points to an existing file, the entrypoint starts `supervisord` instead
+- Your supervisord config should include the normal OpenClaw gateway process **and** any optional helpers you want to supervise
+
+### Example files
+
+- `examples/supervisord/supervisord.conf`
+- `examples/supervisord/docker-compose.override.yml`
+
+Example usage:
+
+```bash
+cp examples/supervisord/docker-compose.override.yml docker-compose.override.yml
+mkdir -p ~/.openclaw/localclaw/.config/supervisor
+cp examples/supervisord/supervisord.conf ~/.openclaw/localclaw/.config/supervisor/supervisord.conf
+
+# edit ~/.openclaw/localclaw/.config/supervisor/supervisord.conf
+# and add your own helper [program:*] entries
+
+make run
+```
+
+The mounted config becomes the switch that enables supervisor mode.
+
+### Personalizing safely
+
+Keep custom helper definitions in your local mounted config, not in this repo's main `docker-compose.yml`.
+That way upstream stays clean while personal deployments can still run additional managed processes.
+
+---
+
 ## Why docker compose
 
 `make run` uses `docker compose up --build` (foreground).
@@ -117,7 +161,7 @@ So LocalClaw comes back automatically after:
 - Matrix bot SDK + E2EE crypto libs
 - GitHub CLI (`gh`), gcloud CLI
 - Helm, kubectl, Go, Trivy, govulncheck, gosec, osv-scanner
-- ripgrep, bat, fd, fzf, jq, ffmpeg
+- ripgrep, bat, fd, fzf, jq, ffmpeg, supervisord
 - network/debug tools (telnet, ping, ssh)
 
 ---
