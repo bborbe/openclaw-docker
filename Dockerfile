@@ -30,6 +30,7 @@ RUN --mount=type=cache,target=/var/cache/apt \
     ripgrep \
     jq \
     ffmpeg \
+    procps \
     supervisor
 
 # Install gcloud CLI
