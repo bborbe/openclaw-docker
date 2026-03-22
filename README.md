@@ -90,44 +90,52 @@ OpenClaw UI: http://localhost:18789
 
 ## Optional helper processes with supervisord
 
-By default the container runs only OpenClaw.
-
-If you want extra long-running helper processes in your **personal deployment layer** (for example a `task-watcher`, `git-ai-sync`, or another sidecar-like loop that should live in the same container), the image now supports an **optional** `supervisord` mode.
+The container now starts `supervisord` for the normal `make run` / `make start` path.
+OpenClaw remains the default managed program, and you can add extra long-running helpers in your **personal deployment layer** via drop-in config files.
 
 This keeps the base image generic:
-- no Ben-specific services are enabled by default
-- existing `make run` / `make start` behavior stays unchanged
-- helper processes are defined only by a mounted config in your own deployment
+- OpenClaw still starts by default with no extra personal services enabled
+- helper processes are opt-in via mounted config snippets
+- upstream `docker-compose.yml` stays clean while personal deployments remain flexible
 
 ### How it works
 
-- Default behavior: `entrypoint.sh` runs `openclaw gateway --allow-unconfigured --bind lan`
-- Optional behavior: if `OPENCLAW_SUPERVISORD_CONFIG` points to an existing file, the entrypoint starts `supervisord` instead
-- Your supervisord config should include the normal OpenClaw gateway process **and** any optional helpers you want to supervise
+- `entrypoint.sh` starts `supervisord` for the default container command
+- the image ships with `/etc/supervisor/supervisord.conf`
+- that base config always runs the OpenClaw gateway
+- optional helper programs are loaded from:
+  - `/home/openclaw/.config/supervisor/conf.d/*.conf`
+
+This means you can keep your own `task-watcher`, `git-ai-sync`, or similar long-running helpers outside the repo and just mount them into the include directory.
 
 ### Example files
 
 - `examples/supervisord/supervisord.conf`
 - `examples/supervisord/docker-compose.override.yml`
+- `examples/supervisord/task-watcher.conf.example`
+- `examples/supervisord/git-ai-sync.conf.example`
 
 Example usage:
 
 ```bash
-cp examples/supervisord/docker-compose.override.yml docker-compose.override.yml
-mkdir -p ~/.openclaw/localclaw/.config/supervisor
-cp examples/supervisord/supervisord.conf ~/.openclaw/localclaw/.config/supervisor/supervisord.conf
+mkdir -p ~/.openclaw/localclaw/.config/supervisor/conf.d
+cp examples/supervisord/task-watcher.conf.example ~/.openclaw/localclaw/.config/supervisor/conf.d/task-watcher.conf
+cp examples/supervisord/git-ai-sync.conf.example ~/.openclaw/localclaw/.config/supervisor/conf.d/git-ai-sync.conf
 
-# edit ~/.openclaw/localclaw/.config/supervisor/supervisord.conf
-# and add your own helper [program:*] entries
-
+# edit the copied files for your environment, then run
 make run
 ```
 
-The mounted config becomes the switch that enables supervisor mode.
+Or mount example files directly with the sample override:
+
+```bash
+cp examples/supervisord/docker-compose.override.yml docker-compose.override.yml
+make run
+```
 
 ### Personalizing safely
 
-Keep custom helper definitions in your local mounted config, not in this repo's main `docker-compose.yml`.
+Keep custom helper definitions in `~/.openclaw/localclaw/.config/supervisor/conf.d/`, not in this repo's main `docker-compose.yml`.
 That way upstream stays clean while personal deployments can still run additional managed processes.
 
 ---
